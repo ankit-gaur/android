@@ -1,19 +1,8 @@
-package frinky.volumeKeys.music.controller.CommonClasses;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-
-public class BlurClass {
+//This class takes care of getting blur of images in android. The image can be a drawable, bitmap, or a id of the drawable,
+//Helpful in changing saturation, brightness and contrast of bitmaps.
+//Can convert drawable to bitmaps and vice-versa.
+public class BlurImagesClass {
 
 
 
