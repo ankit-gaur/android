@@ -1,0 +1,27 @@
+//cache json Array by converting it to string and saving in android shared preferences
+// By Ankit Gaur IIT Indore.
+private void saveJsonArray(JSONArray jsonArray)
+    {
+        String json = jsonArray.toString();
+        SharedPreferences sharedPreferences = getSharedPreferences(sharedPrefsPath,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("photoGalleryJson",json);
+        editor.apply();
+    }
+    private JSONArray getPhotoGalleryJsonArray()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(sharedPrefsPath,MODE_PRIVATE);
+        String json = sharedPreferences.getString("photoGalleryJson","");
+        if(json.length()==0)return null;
+        else{
+            try {
+                JSONArray jsonArray = new JSONArray(json);
+                return jsonArray;
+            }catch (JSONException e){
+                Log.d("ankit", "news -- can't parse string to json array");
+                return null;
+            }
+
+
+        }
+    }
