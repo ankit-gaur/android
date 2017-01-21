@@ -301,7 +301,77 @@ public class BlurImagesClass {
         ColorFilter matrixColorFilter = new ColorMatrixColorFilter(cm );
         return  matrixColorFilter;
     }
+  public static Bitmap overlapBitmapOverItsBlurredBackgroundWithFitCenterScale(Context context,Bitmap source,int backgroundWidth, int backgroundHeight)
+    {
+        int sourceHeight = source.getHeight();
+        int sourceWidth  = source.getWidth();
+        int marginTop = 0;
+        int marginLeft = 0;
 
+        /*
+          Let c be the multiplier which should be multiplied with sourceHeight and sourceWidth to make fitCenter with backround
+          then sourceWidth*c<=backgroundWidth and sourceHeight*c <= backgroundHeight then only they can fit into background
+          it means that c should be min of backgroundWidth/sourceWidth and backgroundHeight/sourceHeight;
+         */
+
+        float c = Math.min((float)backgroundHeight/sourceHeight,(float)backgroundWidth/sourceWidth);
+
+        sourceWidth = Math.round(sourceWidth*c);
+        sourceHeight = Math.round(sourceHeight*c);
+        source = getResizedBitmap(source,sourceHeight,sourceWidth);
+
+        marginTop = (backgroundHeight-sourceHeight)/2;
+        marginLeft = (backgroundWidth-sourceWidth)/2;
+
+        Bitmap blurBackround = getResizedBitmap(source,backgroundHeight,backgroundWidth);
+        blurBackround = fastblur(blurBackround,10);
+        blurBackround = changeBitmapContrastBrightness(blurBackround,0.9f,-25);
+
+        Log.d("ankit",sourceHeight+" in BlurClass "+sourceWidth);
+
+        Bitmap bitmapOverlay = Bitmap.createBitmap(backgroundWidth,backgroundHeight,blurBackround.getConfig());
+        Canvas canvas = new Canvas(bitmapOverlay);
+        canvas.drawBitmap(blurBackround, new Matrix(), null);
+        canvas.drawBitmap(source,marginLeft,marginTop,null);
+        return bitmapOverlay;
+    }
+
+    public static int getScreenWidth(Activity activity)
+    {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+        return  width;
+    }
+    public static int dpToPx(Context context,int dp) {
+        DisplayMetrics displayMetrics =context.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap bitmap, int newHeight, int newWidth)
+    {
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, false);
+    }
+    public static File convertBitmaptoFile(Context context,Bitmap bitmap,String fileName) {
+        File f = new File(context.getCacheDir(), fileName);
+        try {
+            f.createNewFile();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        }catch (IOException e)
+        {
+            if(e!=null)
+            Log.d("ankit",e.getMessage());
+        }
+        return f;
+    }
 
 }
 
