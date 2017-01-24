@@ -365,6 +365,8 @@ public class BlurImagesClass {
             fos.write(bitmapdata);
             fos.flush();
             fos.close();
+            
+            //handling io exceptions is must in android.
         }catch (IOException e)
         {
             if(e!=null)
