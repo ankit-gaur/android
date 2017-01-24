@@ -1,0 +1,36 @@
+  public static boolean isFileinCache(Context context,String fileName)
+    {
+        File f = new File(context.getCacheDir(), fileName);
+        return f.exists();
+    }
+    public static void saveBitmaptoCache(Context context, Bitmap bitmap,String name)
+    {
+        File f = new File(context.getCacheDir(), name);
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        }catch (IOException e)
+        {
+            if(e!=null)
+                Log.d("ankit",e.getMessage());
+        }
+    }
+    public static Bitmap getBitmapFromCache(Context context,String fileName)
+    {
+        File cacheFile = new File(context.getCacheDir(),fileName);
+        try{
+           FileInputStream fis = new FileInputStream(cacheFile);
+            return BitmapFactory.decodeStream(fis);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+            return  null;
+        }
+    }
