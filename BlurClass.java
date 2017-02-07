@@ -2,7 +2,7 @@
 //This class takes care of getting blur of images in android. The image can be a drawable, bitmap, or a id of the drawable,
 //Helpful in changing saturation, brightness and contrast of bitmaps.
 //Can convert drawable to bitmaps and vice-versa.
-//various methods in this class are taken from Stack Overflow and combined.
+//some methods in this class are taken from Stack Overflow and combined.
 
 public class BlurImagesClass {
 
